@@ -263,6 +263,10 @@ module Make(D: Date_sig.S)(T: Time_sig.S) = struct
     | #D.field as f -> unsplit (D.prev d f) t
     | #T.field as f -> unsplit d (T.prev t f)
 
+  let has_expired initial_date potential_expiration_date period =
+    let initial_date_plus_period = add initial_date period in
+    compare initial_date_plus_period potential_expiration_date >= 0
+
 end
 
 (* ************************************************************************* *)
@@ -507,6 +511,10 @@ module Make_Precise(D: Date_sig.S)(T: Time_sig.S) = struct
   let prev x = function
     | #D.field as f -> normalize (D.prev x.date f) x.time
     | #T.field as f -> normalize x.date (T.prev x.time f)
+
+  let has_expired initial_date potential_expiration_date period =
+    let initial_date_plus_period = add initial_date period in
+    compare initial_date_plus_period potential_expiration_date >= 0
 
 end
 
